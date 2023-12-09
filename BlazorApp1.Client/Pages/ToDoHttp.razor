@@ -1,0 +1,33 @@
+﻿@page "/todo-http"
+
+@inject HttpClient Http
+
+@if (todoItems == null)
+{
+    <p>No Todo Items found...</p>
+}
+else
+{
+    <ul>
+        @foreach (var item in todoItems)
+        {
+            <li>@item</li>
+        }
+    </ul>
+}
+
+@code {
+    private string[]? todoItems;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            todoItems = await Http.GetFromJsonAsync<string[]>("api/todo-items");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+    }
+}
